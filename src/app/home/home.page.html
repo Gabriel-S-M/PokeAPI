@@ -26,6 +26,7 @@
                 <div class="ion-text-center">
                   <img [src]="selectedPokemon?.image" [alt]="selectedPokemon?.name" />
                 </div>
+                <p><strong>Nome:</strong> {{selectedPokemon?.name}}</p>
                 <p><strong>Type:</strong> {{ selectedPokemon?.types.join('/') }}</p>
                 <p><strong>Abilities:</strong> {{ selectedPokemon?.abilities.join('/ ') }}</p>
                 <p><strong>Catch Rate:</strong> {{ selectedPokemon?.catchRate }}</p>
