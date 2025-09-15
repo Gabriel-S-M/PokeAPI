@@ -1,20 +1,53 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Blank
+      Pokedex App
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-grid> 
+    <ion-row>
+      <ion-col *ngFor="let p of pokemons" size="6" size-sm="4">
+        <ion-card>
+          <ion-button size="small" style="--background: transparent !important;">
+            <ion-icon name="star" color="dark"></ion-icon>
+          </ion-button>
+          <img [src]="p.image" [alt]="p.name" />
+          <ion-card-header>
+            <ion-card-title>{{ p.name | titlecase }}</ion-card-title>
+            <ion-card-subtitle>#{{ p.id }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-button (click)="presentPopover($event)">Click Me</ion-button>
+          <ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
+            <ng-template>
+              <ion-content class="ion-padding">
+                <div class="ion-text-center">
+                  <img [src]="selectedPokemon?.image" [alt]="selectedPokemon?.name" />
+                </div>
+                <p><strong>Type:</strong> {{ selectedPokemon?.types.join('/') }}</p>
+                <p><strong>Abilities:</strong> {{ selectedPokemon?.abilities.join(', ') }}</p>
+                <p><strong>Catch Rate:</strong> {{ selectedPokemon?.catchRate }}</p>
+                <p>
+                  <strong>Height:</strong> {{ heightMeters(selectedPokemon?.height) }} m |
+                  <strong>Weight:</strong> {{ weightKg(selectedPokemon?.weight) }} kg
+                </p>
+              </ion-content>
+            </ng-template>
+          </ion-popover>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-  </div>
+  <ion-alert>
+
+  </ion-alert>
 </ion-content>
+
+<ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button>
+      <ion-icon name="star"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
