@@ -11,15 +11,15 @@
     <ion-row>
       <ion-col *ngFor="let p of pokemons" size="6" size-sm="4">
         <ion-card>
-          <ion-button size="small" style="--background: transparent !important;">
-            <ion-icon name="star" color="dark"></ion-icon>
+          <ion-button size="small" color="light" (click)="toggleFavorite(p); toggleStar(p.id)">
+            <ion-icon name="star" [style.color]="clickedStars[p.id] ? 'gold' : 'black'"></ion-icon>
           </ion-button>
           <img [src]="p.image" [alt]="p.name" />
           <ion-card-header>
             <ion-card-title>{{ p.name | titlecase }}</ion-card-title>
             <ion-card-subtitle>#{{ p.id }}</ion-card-subtitle>
           </ion-card-header>
-          <ion-button (click)="presentPopover($event)">Click Me</ion-button>
+          <ion-button (click)="selectPokemon(p); presentPopover($event)">Mais Detalhes</ion-button>
           <ion-popover #popover [isOpen]="isOpen" (didDismiss)="isOpen = false">
             <ng-template>
               <ion-content class="ion-padding">
@@ -27,7 +27,7 @@
                   <img [src]="selectedPokemon?.image" [alt]="selectedPokemon?.name" />
                 </div>
                 <p><strong>Type:</strong> {{ selectedPokemon?.types.join('/') }}</p>
-                <p><strong>Abilities:</strong> {{ selectedPokemon?.abilities.join(', ') }}</p>
+                <p><strong>Abilities:</strong> {{ selectedPokemon?.abilities.join('/ ') }}</p>
                 <p><strong>Catch Rate:</strong> {{ selectedPokemon?.catchRate }}</p>
                 <p>
                   <strong>Height:</strong> {{ heightMeters(selectedPokemon?.height) }} m |
@@ -41,13 +41,11 @@
     </ion-row>
   </ion-grid>
 
-  <ion-alert>
-
-  </ion-alert>
+  <ion-button (click)="loadMore()" expand="full" color="light">Load More</ion-button>
 </ion-content>
 
 <ion-fab slot="fixed" vertical="bottom" horizontal="end">
-    <ion-fab-button>
-      <ion-icon name="star"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <ion-fab-button (click)="goToFavorites()">
+    <ion-icon name="star"></ion-icon>
+  </ion-fab-button>
+</ion-fab>

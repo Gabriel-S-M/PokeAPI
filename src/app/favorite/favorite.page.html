@@ -1,0 +1,74 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/" text="Voltar"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Pokémons Favoritos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid *ngIf="favorites.length > 0">
+    <ion-row>
+      <ion-col *ngFor="let p of favorites; let i = index" size="6" size-sm="4">
+        <ion-card>
+          <img [src]="p.image" [alt]="p.name" />
+          <ion-card-header>
+            <ion-card-title>{{ p.name | titlecase }}</ion-card-title>
+            <ion-card-subtitle>#{{ p.id }}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <p><strong>Type:</strong> {{ p.types.join('/') }}</p>
+            <p><strong>Abilities:</strong> {{ p.abilities.join('/ ') }}</p>
+            <p><strong>Catch Rate:</strong> {{ p.catchRate }}</p>
+            <p>
+              <strong>Height:</strong> {{ (p.height / 10) | number:'1.1-1' }} m |
+              <strong>Weight:</strong> {{ (p.weight / 10) | number:'1.1-1' }} kg
+            </p>
+          </ion-card-content>
+
+          <ion-buttons>
+            <ion-button color="success" fill="clear" (click)="enableEdit(i)">
+              <ion-icon name="pencil"></ion-icon>
+            </ion-button>
+            <ion-button color="danger" fill="clear" (click)="confirmRemove(i)">
+              <ion-icon name="trash"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ng-container *ngIf="editIndex === i && editPokemon as ep">
+            <ion-item>
+              <ion-label position="stacked">Nome</ion-label>
+              <ion-input name="editName" [(ngModel)]="ep.name"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Type</ion-label>
+              <ion-input name="editTypes" [(ngModel)]="ep.typesString"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Abilities</ion-label>
+              <ion-input name="editAbilities" [(ngModel)]="ep.abilitiesString"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Catch Rate</ion-label>
+              <ion-input name="editCatchRate" type="number" [(ngModel)]="ep.catchRate"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Height (m)</ion-label>
+              <ion-input name="editHeight" type="number" [(ngModel)]="ep.height" placeholder="Ex: 1.5"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="stacked">Weight (kg)</ion-label>
+              <ion-input name="editWeight" type="number" [(ngModel)]="ep.weight" placeholder="Ex: 14.0"></ion-input>
+            </ion-item>
+            <ion-button color="success" expand="block" (click)="saveEdit(i)">Salvar</ion-button>
+            <ion-button color="medium" expand="block" (click)="cancelEdit()">Cancelar</ion-button>
+          </ng-container>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="favorites.length === 0" class="ion-text-center ion-padding">
+    Nenhum favorito encontrado.
+  </div>
+</ion-content>
